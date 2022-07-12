@@ -101,9 +101,9 @@ const buyFunction=cart=>{
      for(let id in cart){
       sumprice = sumprice+cart[id]['count']*cart[id]['cost'];
      }
-      tg.sendData("it works"); 
+    alert( sumprice);
+    tg.sendData("it works"); 
 
    }
 }
-
 
