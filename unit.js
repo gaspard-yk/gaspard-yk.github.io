@@ -88,5 +88,3 @@ const buyFunction=cart=>{
       tg.sendData(sumprice); 
    }
 }
-
-
