@@ -1,3 +1,6 @@
+let tg = window.Telegram.WebApp; //получаем объект webapp телеграма 
+tg.expand(); //расширяем на все окно
+
 let range ={
 'id0001':{
    "name":"cup",
@@ -26,6 +29,7 @@ document.onclick = event=>{
    }
 }
 
+
 // увеличение количества товара
 const plusFunction=id=>{
    if((id in cart) === false){
@@ -35,8 +39,10 @@ const plusFunction=id=>{
    else{
       cart[id]['count']++;
    }
-   renderCart();
+   var qty_el = document.getElementById(id); var qty = qty_el.value; if( !isNaN( qty )) qty_el.value++;return false;
 }
+
+
 // уменьшение количества товара
 const minusFunction=id=>{
    if ((id in cart) === false){
@@ -48,17 +54,27 @@ const minusFunction=id=>{
       }
    
    cart[id]['count']--;
-   renderCart();
+   var qty_el = document.getElementById(id); var qty = qty_el.value; if( !isNaN( qty )) qty_el.value--;return false;
 }
+
+
 // удаление товара
 const deleteFunctiom=id=>{
    delete cart[id];
-   renderCart();
+   var qty_el = document.getElementById(id); var qty = qty_el.value; if( !isNaN( qty )) qty_el.value=0;return false;
 }
+
 
 const renderCart =()=>{
    console.log(cart);
 }
+
+Telegram.WebApp.onEvent('mainButtonClicked', function(){
+   tg.sendData("some string that we need to send"); 
+   //при клике на основную кнопку отправляем данные в строковом виде
+ });
+
+
 //!не доделана
 const buyFunction=cart=>{
    if(Object.keys(cart).length==0){
@@ -69,7 +85,7 @@ const buyFunction=cart=>{
      for(let id in cart){
       sumprice = sumprice+cart[id]['count']*cart[id]['cost'];
      }
-     console.log(sumprice);
+      tg.sendData(sumprice); 
    }
 }
 
