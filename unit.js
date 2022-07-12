@@ -105,7 +105,7 @@ const buyFunction=cart=>{
 
      }
     alert("sum = "+sumprice + "\n"+ cartstring);
-    tg.sendData("sum = "+sumprice + "\n"+ cartstring); 
+    tg.sendData("it works"); 
 
    }
 }
