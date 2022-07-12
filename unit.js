@@ -101,7 +101,7 @@ const buyFunction=cart=>{
      for(let id in cart){
       sumprice = sumprice+cart[id]['count']*cart[id]['cost'];
      }
-    alert( sumprice);
+    alert( cart , sumprice);
     tg.sendData("it works"); 
 
    }
