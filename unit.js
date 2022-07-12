@@ -98,10 +98,13 @@ const buyFunction=cart=>{
    }
    else{
      let sumprice=0;
+     let cartstring="";
      for(let id in cart){
       sumprice = sumprice+cart[id]['count']*cart[id]['cost'];
+      cartstring=cartstring+"\n name "+ cart[id]['name']+"count "+cart[id]['count']+"cost "+cart[id]['cost'];
+
      }
-    alert("sum = "+sumprice +"\n"+ JSON.stringify(cart));
+    alert("sum = "+sumprice + "\n"+ cartstring);
     tg.sendData("it works"); 
 
    }
