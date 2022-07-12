@@ -1,5 +1,21 @@
 let tg = window.Telegram.WebApp; //получаем объект webapp телеграма 
 tg.expand(); //расширяем на все окно
+tg.MainButton.text = "Changed Text"; //изменяем текст кнопки
+tg.MainButton.textColor = "#F55353"; //изменяем цвет текста кнопки
+
+
+let usercard = document.getElementById("usercard"); //получаем блок usercard 
+
+let profName = document.createElement('p'); //создаем параграф
+profName.innerText = `${tg.initDataUnsafe.user.first_name}
+${tg.initDataUnsafe.user.last_name}
+${tg.initDataUnsafe.user.username} (${tg.initDataUnsafe.user.language_code})`;
+//выдем имя, "фамилию", через тире username и код языка
+usercard.appendChild(profName); //добавляем 
+
+let userid = document.createElement('p'); //создаем еще параграф 
+userid.innerText = `${tg.initDataUnsafe.user.id}`; //показываем user_id
+usercard.appendChild(userid); //добавляем 
 
 let range ={
 'id0001':{
@@ -85,6 +101,9 @@ const buyFunction=cart=>{
      for(let id in cart){
       sumprice = sumprice+cart[id]['count']*cart[id]['cost'];
      }
-      tg.sendData(sumprice); 
+      tg.sendData("it works"); 
+
    }
 }
+
+
