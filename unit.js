@@ -7,9 +7,14 @@ Telegram.WebApp.onEvent('mainButtonClicked', function(){
    if(Object.keys(cart).length==0){
       return;
    }
-   tg.sendData("some string that we need to send");  //при клике на основную кнопку отправляем данные в строковом виде}
+   let sumprice=0;
+   let cartstring="";
+   for(let id in cart){
+      sumprice = sumprice+cart[id]['count']*cart[id]['cost'];
+      cartstring=cartstring+"\n name "+ cart[id]['name']+" count "+cart[id]['count']+ " cost "+cart[id]['cost'];
+     }
+   tg.sendData("sum = "+sumprice + "\n"+ cartstring);  //при клике на основную кнопку отправляем данные в строковом виде}
 });
-
 
 //let usercard = document.getElementById("usercard"); //получаем блок usercard 
 //let profName = document.createElement('p'); //создаем параграф
