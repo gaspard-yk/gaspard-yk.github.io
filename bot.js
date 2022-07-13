@@ -8,6 +8,9 @@
 
  const bot = new Telegraf('5444045893:AAEFNihtjBIK90frln1y3JPDRZvp1BehKwY'); //сюда помещается токен, который дал botFather
  bot.hears('hi', (ctx) => ctx.reply('Hey there'));// bot.hears это обработчик конкретного текста, данном случае это - "hi"
- bot.on('message', (ctx) => ctx.reply('my test',urlbutton));
- bot.on('web_app_data',(ctx)=>ctx.reply(ctx.webAppData.data));
+ bot.hears('test', (ctx) => ctx.reply('my test',urlbutton));
+ bot.on('web_app_data',(ctx)=>{
+
+  ctx.reply(ctx.message.web_app_data.data);
+ })
  bot.launch(); // запуск бота
