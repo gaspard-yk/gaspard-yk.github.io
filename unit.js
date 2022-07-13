@@ -45,7 +45,7 @@ document.onclick = event=>{
    if(event.target.classList.contains('minus')){
       minusFunction(event.target.dataset.id);
    }
-   if(event.target.classList.contains('show my cart')){
+   if(event.target.classList.contains('show')){
      showCartFunction(cart);
    }
 }
