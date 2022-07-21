@@ -139,23 +139,23 @@ const renderCart =()=>{
 const showCartFunction=cart=>{
    if(Object.keys(cart).length==0){
       //return;
-      // 1. Создаём новый объект XMLHttpRequest
-      var xhr = new XMLHttpRequest();
-      xhr.open('GET', "http://itaurum.ru:47915/sc/hs/ServerSCStore/GiveProduct/0001", true)
-      XMLReq.setRequestHeader("Authorization", "Basic " + btoa("Администратор:14142"));
-      xhr.responseType = 'json';
-      xhr.send();
-      xhr.onload = function() {
-         if (xhr.status != 200) { // анализируем HTTP-статус ответа, если статус не 200, то произошла ошибка
-             alert(`Ошибка ${xhr.status}: ${xhr.statusText}`); // Например, 404: Not Found
-         } else { // если всё прошло гладко, выводим результат
-         alert(`Готово, получили ${xhr.response.length} байт`); // response -- это ответ сервера
-         }
-      };
-      xhr.onerror = function() {
-         alert("Запрос не удался");
-      };
-
+      const response = await fetch('https://itaurum.ru:8443/sc/hs/ServerSCStore/GiveProduct/0001', { 
+    method: 'get', 
+    headers: new Headers({
+        'Authorization': 'Basic '+btoa('Администратор:14142'), 
+        //'Content-Type': 'application/x-www-form-urlencoded'
+    }), 
+    });
+    if (response.ok) 
+    { // если HTTP-статус в диапазоне 200-299
+       // получаем тело ответа (см. про этот метод ниже)
+       let json = await response.json();
+    } 
+   else 
+    { 
+    alert("Ошибка HTTP: " + response.status);
+    }
+      //const myJson = await response.json(); 
    }
 
    else{
