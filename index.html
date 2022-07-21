@@ -144,7 +144,7 @@ const showCartFunction=cart=>{
          method: 'get', 
          headers:{
         'Content-Type': 'application/json;charset=utf-8' ,   
-        'Authorization': 'Basic '+btoa('Администратор:14142'),   
+        'Authorization': 'Basic'+encodeURI('Администратор:14142'),  
     }, 
     mode:"cors",
     cache:"default",
