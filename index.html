@@ -141,7 +141,8 @@ const showCartFunction=cart=>{
       //return;
       // 1. Создаём новый объект XMLHttpRequest
       var xhr = new XMLHttpRequest();
-      xhr.open('GET', "https://itaurum.ru:8443/sc/hs/ServerSCStore/GiveProduct/000000001", true, 'Администратор', '14142')
+      xhr.open('GET', "http://itaurum.ru:47915/sc/hs/ServerSCStore/GiveProduct/0001", true)
+      XMLReq.setRequestHeader("Authorization", "Basic " + btoa("Администратор:14142"));
       xhr.responseType = 'json';
       xhr.send();
       xhr.onload = function() {
