@@ -139,7 +139,7 @@ const renderCart =()=>{
 const showCartFunction=cart=>{
    if(Object.keys(cart).length==0){
       //return;
-      let response = await fetch('https://itaurum.ru:8443/sc/hs/ServerSCStore/GiveProduct/0001', { 
+      let response = fetch('https://itaurum.ru:8443/sc/hs/ServerSCStore/GiveProduct/0001', { 
          method: 'get', 
          headers:{
         'Authorization': 'Basic'+encodeURI('Администратор:14142'),
@@ -151,7 +151,7 @@ const showCartFunction=cart=>{
     console.log('first')
     if (response.ok) { // если HTTP-статус в диапазоне 200-299
      // получаем тело ответа (см. про этот метод ниже)
-     let json = await response.json();
+     let json = response.json();
      console.log(json)
    } 
    else {
