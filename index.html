@@ -143,8 +143,8 @@ const showCartFunction=cart=>{
      fetch('https://itaurum.ru:8443/sc/hs/ServerSCStore/GiveProduct/0001', { 
          method: 'get', 
          headers:{
-        'Authorization': 'Basic '+btoa('Администратор:14142'), 
-        'Content-Type': 'application/json;charset=utf-8'
+        'Content-Type': 'application/json;charset=utf-8' ,   
+        'Authorization': 'Basic '+btoa('Администратор:14142'),   
     }, 
     mode:"cors",
     cache:"default",
