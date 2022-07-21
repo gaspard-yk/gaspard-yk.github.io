@@ -146,8 +146,8 @@ const showCartFunction=cart=>{
         'Content-Type': 'application/json;charset=utf-8' ,   
         'Authorization': 'Basic'+encodeURI('Администратор:14142'),  
     }, 
-    mode:"no-cors",
-    cache:"default",
+    //mode:"no-cors",
+    //cache:"default",
     })
     .then(response=> response.json())
     .then(json=>console.log(json))
