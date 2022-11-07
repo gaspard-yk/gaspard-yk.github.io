@@ -240,7 +240,7 @@
 			// 	sumprice = sumprice + cart[id]['count'] * cart[id]['cost'];
 			// 	cartstring = cartstring + "\n name " + cart[id]['name'] + " count " + cart[id]['count'] + " cost " + cart[id]['cost'];
 			// }
-			tg.sendData(window.cart); //при клике на основную кнопку отправляем данные в строковом виде}
+			tg.sendData(JSON.stringify(cart)); //при клике на основную кнопку отправляем данные в строковом виде}
 		});
 	</script>
 
