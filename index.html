@@ -240,8 +240,17 @@
 			// 	sumprice = sumprice + cart[id]['count'] * cart[id]['cost'];
 			// 	cartstring = cartstring + "\n name " + cart[id]['name'] + " count " + cart[id]['count'] + " cost " + cart[id]['cost'];
 			// }
-			send = JSON.stringify(cart)
-			tg.sendData(send); //при клике на основную кнопку отправляем данные в строковом виде}
+			arr=[];
+			i=0;
+			for(var key in cart){
+				arr.push({})
+				arr[i].name=cart[key]['name'];
+				arr[i].cost=cart[key]['cost'];
+				arr[i].count=cart[key]['count'];
+				i++;
+			}
+				send = JSON.stringify(arr)
+				tg.sendData(send); //при клике на основную кнопку отправляем данные в строковом виде}
 		});
 	</script>
 
