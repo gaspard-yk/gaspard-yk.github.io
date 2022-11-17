@@ -244,6 +244,7 @@
 			i=0;
 			for(var key in cart){
 				arr.push({})
+				arr[i].code=key;
 				arr[i].name=cart[key]['name'];
 				arr[i].cost=cart[key]['cost'];
 				arr[i].count=cart[key]['count'];
