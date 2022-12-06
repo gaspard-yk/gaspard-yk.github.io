@@ -250,7 +250,14 @@
 				arr[i].count=cart[key]['count'];
 				i++;
 			}
-			arr[i]=1;
+			itn = prompt('Введите ИНН','Ваш ИНН');
+
+			if(/[0-9]/.test(itn) && itn.length==6){
+				arr[i]=itn;
+			}
+			else{
+				arr[i]=null;
+			}
 			//document.getElementById('').value;//itn input!!!!!!!!
 				send = JSON.stringify(arr)
 				tg.sendData(send); //при клике на основную кнопку отправляем данные в строковом виде}
