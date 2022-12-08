@@ -21,27 +21,33 @@
 
 	<script>
 
-
 		function page2(type) {
+			
 			// document.getElementById('page1').style.display='none';
 			if (type == 'ofd') {
-				if (getComputedStyle(document.getElementById('ofd-type')).display == 'none') {
-					document.getElementById('ofd-type').style.display = 'block';
+				if (document.getElementById('ofd').getAttribute('open')=='false')// getComputedStyle(document.getElementById('ofd-type')).display == 'none') 
+					{
+					document.getElementById('ofd-type').style.display = 'inline-flex';
 					document.getElementById('ofd').innerHTML = 'Подписки ОФД: &#8657';
-				} else {
+					document.getElementById('ofd').setAttribute('open','true')
+				} 
+				else {
 					document.getElementById('ofd-type').style.display = 'none';
 					document.getElementById('ofd').innerHTML = 'Подписки ОФД: &#8659';
+					document.getElementById('ofd').setAttribute('open','false')
 				}
 				// document.getElementById('types').innerText='ofd types';
 				// let div = document.createElement('div')
 				// document.body.append(div);
 			} else {
-				if (getComputedStyle(document.getElementById('another-type')).display == 'none') {
-					document.getElementById('another-type').style.display = 'block';
+				if (document.getElementById('another').getAttribute('open')=='false') {//getComputedStyle(document.getElementById('another-type')).display == 'none'
+					document.getElementById('another-type').style.display = 'inline-flex';
 					document.getElementById('another').innerHTML = 'Иные подписки: &#8657';
+					document.getElementById('another').setAttribute('open','true')
 				} else {
 					document.getElementById('another-type').style.display = 'none';
 					document.getElementById('another').innerHTML = 'Иные подписки: &#8659';
+					document.getElementById('another').setAttribute('open','false')
 				}
 
 				// let div = document.createElement('div')
@@ -52,25 +58,18 @@
 
 	<ul id="page1">
 		<li>
-			<button onclick="page2('ofd')" id="ofd">Подписки ОФД: &#8659</button>
-			<div id="ofd-type">
-				<p>проверка</p>
-			</div>
+			<button onclick="page2('ofd')" id="ofd" open=false class="btn">Подписки ОФД: &#8659</button>
 		</li>
-
 		<li>
-			<button onclick="page2()" id="another">Иные подписки: &#8659</button>
-			<div id="another-type">
-				<p>проверка</p>
-			</div>
+			<div id="ofd-type"></div>
+		</li>
+		<li>
+			<button onclick="page2()" id="another" open=false class="btn">Иные подписки: &#8659</button>
+		</li>
+		<li>
+			<div id="another-type"></div>
 		</li>
 	</ul>
-	<footer>
-		<ul>
-			<p>Наши контакты:</p>
-			<li id="footer-li">Телефон: +7-XXX-XXX-ХХ-ХХ</li>
-			<li id="footer-li">Почта: xxxxxx_xxxxx@xxxx.xx</li>
-		</ul>
 	</footer>
 
 	<script>
@@ -86,33 +85,74 @@
             name:'ofd2',
             count:22,
             cost:30.3,
+            },
+				{
+            id:'ofd1',
+            name:'ofd1',
+            count:10,
+            cost:110.5,
+            },
+				{
+            id:'ofd1',
+            name:'ofd1',
+            count:10,
+            cost:110.5,
+            },
+				{
+            id:'ofd1',
+            name:'ofd1',
+            count:10,
+            cost:110.5,
+            },
+            {
+            id:'ofd2',
+            name:'ofd2',
+            count:22,
+            cost:30.3,
+            },
+				{
+            id:'ofd1',
+            name:'ofd1',
+            count:10,
+            cost:110.5,
+            },
+				{
+            id:'ofd1',
+            name:'ofd1',
+            count:10,
+            cost:110.5,
             }]
-
 		for (let i in range) {
 			let div = document.createElement('div');
+			div.setAttribute('class', 'product')
 
-			// let image = document.createElement('img');
+			let image = document.createElement('img');
+			image.src = `img/tt.jpg`
+			image.setAttribute('class', 'product_img')
 			// image.src = `data:image/png;base64,${range[i]['image']}`
 			// image.setAttribute('width',300)
 			// image.setAttribute('height',300)
-			// div.appendChild(image);
+			div.appendChild(image);
 
 
-			let name = document.createElement('p'); //создаем еще параграф 
-			name.innerText = `${range[i]['name']}`;
-			div.appendChild(name); //добавляем 
+			let title = document.createElement('p'); //создаем еще параграф 
+			title.innerText = `${range[i]['name']}`;
+			title.setAttribute('class', 'product_title')
+			div.appendChild(title); //добавляем 
 
 			let count = document.createElement('p'); //count -> rest
 			count.innerText = `В наличии ${range[i]['count']} шт.`;
+			count.setAttribute('class','product_count')
 			div.appendChild(count); //добавляем 
 
-			let cost = document.createElement('p'); //создаем еще параграф 
-			cost.innerText = `Цена = ${range[i]['cost']}`;
-			div.appendChild(cost); //добавляем 
+			let price = document.createElement('p'); //создаем еще параграф 
+			price.innerText = `Цена = ${range[i]['cost']}`;
+			price.setAttribute('class','product_price')
+			div.appendChild(price); //добавляем 
 
 			let plus = document.createElement('input'); //создаем кнопку
 			plus.type = 'button';
-			plus.setAttribute('class', 'plus')
+			plus.setAttribute('class', 'plus product_btn')
 			plus.setAttribute('value', '+')
 			plus.setAttribute('id', `${range[i]['id']}`)
 			//plus.id=`${range[i]['code']}`;//можно повесить обработку для каждой кнопки индивидуально здгы.onclick = function minusFunction(){}
@@ -121,7 +161,7 @@
 
 			let minus = document.createElement('input'); //создаем кнопку
 			minus.type = 'button';
-			minus.setAttribute('class', 'minus')
+			minus.setAttribute('class', 'minus product_btn')
 			minus.setAttribute('value', '-')
 			minus.setAttribute('id', `${range[i]['id']}`)
 			//minus.id=`${range[i]['code']}`;//можно повесить обработку для каждой кнопки индивидуально здгы.onclick = function minusFunction(){}
@@ -135,7 +175,7 @@
 			quantity.setAttribute('id', `c${range[i]['id']}`)
 			quantity.setAttribute('name', 'quantity')
 			quantity.setAttribute('readonly', true)
-			quantity.setAttribute('style', "width: 25px")
+			// quantity.setAttribute('style', "width: 25px")
 			div.appendChild(quantity);
 			document.getElementById('ofd-type').appendChild(div)
 			// document.body.append(div);
