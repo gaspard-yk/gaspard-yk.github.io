@@ -9,17 +9,87 @@
 	<link href="style.css" rel="stylesheet" type="text/css">
 </head>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
 <!--Подключаем скрипт от телеграм-->
 
 
 <body>
-
-	<header>
-		<h1>Cart for Telegram </h1>
-	</header>
-
-
 	<script>
+		let tg = window.Telegram.WebApp; //получаем объект webapp телеграма 
+		tg.expand(); //расширяем на все окно
+		tg.MainButton.text = "Корзина"; //изменяем текст кнопки
+		tg.MainButton.textColor = "#F55353"; //изменяем цвет текста кнопки
+		tg.MainButton.show()
+		Telegram.WebApp.onEvent('mainButtonClicked', function() {
+			tg.MainButton.hide()
+			Show_cart();
+		})
+		//увеличение количества товар
+		const plusFunction =id=>{
+		if(range[id]['count'] == 0){
+				return }
+		if((id in cart) === false){
+			cart[id] = {name:range[id]['name'],
+						cost:range[id]['cost'],
+						count:0}
+			cart[id]['count']=1;
+			return
+		}
+		else{
+			if(cart[id]['count'] == range[id]['count'] ){
+				return }
+			cart[id]['count']++;
+		}
+			// var qty_el = document.getElementById('q'+id); var qty = qty_el.value; if( !isNaN( qty )) qty_el.value++;return false;
+		if(document.getElementById(`product ${id}`)!=null){
+		document.getElementById('q'+id).value= parseInt(document.getElementById('q'+id).value)+1; 
+		document.getElementById('s'+id).value= parseInt(document.getElementById('q'+id).value)*cart[id].cost; 
+		}
+		}
+		
+		
+		const minusFunction =id=>{
+         if ((id in cart) === false){
+            return true;
+         }
+         else if (cart[id]['count']-1==0){
+               deleteFunctiom(id);
+               return true;
+            }
+         cart[id]['count']--;
+			if(document.getElementById(`product ${id}`)!=null){
+         // var qty_el = document.getElementById('q'+id); var qty = qty_el.value; if( !isNaN( qty )) qty_el.value--;return false;
+			document.getElementById('q'+id).value= parseInt(document.getElementById('q'+id).value)-1; 
+			document.getElementById('s'+id).value= parseInt(document.getElementById('q'+id).value)*cart[id].cost; 
+			}
+      }
+      
+		
+		// удаление товара
+      const deleteFunctiom = id=>{
+         delete cart[id];
+         // document.getElementById('q'+id).value=0; 
+ 			document.getElementById(`product ${id}`).remove();
+      }
+		
+		
+		document.onclick = event=>{
+         if(event.target.classList.contains('plus')){
+				console.log('+')
+            plusFunction(event.target.id);
+            // console.log(cart)
+         }
+         if(event.target.classList.contains('minus')){
+            minusFunction(event.target.id);
+            // console.log(cart)
+         }
+         // if(event.target.classList.contains('show')){
+         // showCartFunction(cart);
+         // }
+      }
+		
 
 		function page2(type) {
 			
@@ -28,11 +98,13 @@
 				if (document.getElementById('ofd').getAttribute('open')=='false')// getComputedStyle(document.getElementById('ofd-type')).display == 'none') 
 					{
 					document.getElementById('ofd-type').style.display = 'inline-flex';
+					document.getElementById('ofd').style.background ='#4CAF50'
 					document.getElementById('ofd').innerHTML = 'Подписки ОФД: &#8657';
 					document.getElementById('ofd').setAttribute('open','true')
 				} 
 				else {
 					document.getElementById('ofd-type').style.display = 'none';
+					document.getElementById('ofd').style.background ='#333'
 					document.getElementById('ofd').innerHTML = 'Подписки ОФД: &#8659';
 					document.getElementById('ofd').setAttribute('open','false')
 				}
@@ -42,10 +114,12 @@
 			} else {
 				if (document.getElementById('another').getAttribute('open')=='false') {//getComputedStyle(document.getElementById('another-type')).display == 'none'
 					document.getElementById('another-type').style.display = 'inline-flex';
+					document.getElementById('another').style.background ='#4CAF50'
 					document.getElementById('another').innerHTML = 'Иные подписки: &#8657';
 					document.getElementById('another').setAttribute('open','true')
 				} else {
 					document.getElementById('another-type').style.display = 'none';
+					document.getElementById('another').style.background ='#333'
 					document.getElementById('another').innerHTML = 'Иные подписки: &#8659';
 					document.getElementById('another').setAttribute('open','false')
 				}
@@ -54,86 +128,222 @@
 				// document.body.append(div);
 			}
 		}
+
+		function Show_cart(){
+			for (let i in cart) {
+
+			let div = document.createElement('div');
+			div.setAttribute('class', 'cart_product')
+			div.setAttribute('id', `product ${i}`)
+
+			let image = document.createElement('img');
+			image.src = `${range[i].image}`
+			image.setAttribute('class', 'cart_product_img')
+			div.appendChild(image);
+
+			let title = document.createElement('p'); //создаем еще параграф 
+			title.innerHTML = `${cart[i]['name']}`;
+			title.setAttribute('class', 'cart_product_title')
+			div.appendChild(title); //добавляем 
+
+			let plus = document.createElement('input'); //создаем кнопку
+			plus.type = 'button';
+			plus.setAttribute('class', 'plus cart_product_plus')
+			plus.setAttribute('value', '+')
+			plus.setAttribute('id', `${i}`)
+			//plus.id=`${range[i]['code']}`;//можно повесить обработку для каждой кнопки индивидуально здгы.onclick = function minusFunction(){}
+			// minus.onclick = plusFunction(minus.id);
+         div.appendChild(plus); //добавляем 
+
+			let quantity = document.createElement('input');
+			quantity.type = 'text';
+			quantity.setAttribute('class', 'cart_product_quantity')
+			quantity.setAttribute('value', `${cart[i]['count']}`)
+			quantity.setAttribute('id', `q${i}`)
+			quantity.setAttribute('readonly', true)
+			// quantity.setAttribute('style', "width: 25px")
+			div.appendChild(quantity);
+
+			let minus = document.createElement('input'); //создаем кнопку
+			minus.type = 'button';
+			minus.setAttribute('class', 'minus  cart_product_minus')
+			minus.setAttribute('value', '-')
+			minus.setAttribute('id', `${i}`)
+			//minus.id=`${range[i]['code']}`;//можно повесить обработку для каждой кнопки индивидуально здгы.onclick = function minusFunction(){}
+			// minus.onclick = minusFunction(minus.id);
+			div.appendChild(minus);
+
+			let sumprice = document.createElement('input'); //создаем еще параграф 
+			sumprice.type = 'text';
+			sumprice.setAttribute('class', 'cart_product_sumprice');
+			sumprice.setAttribute('value',`${  cart[i]['cost']  * cart[i]['count']  }`);
+			sumprice.setAttribute('id', `s${i}`)
+			sumprice.setAttribute('readonly', true)
+			div.appendChild(sumprice); //добавляем 
+
+			document.getElementById('cart_goods').appendChild(div)
+
+		}
+			$.fancybox.open({
+		src: '#cart',
+		type: 'inline',
+		closeClickOutside : false,
+		opts:{
+			afterClose: function() {
+			document.getElementById('cart_goods').innerHTML='';
+			tg.MainButton.show();
+		}}});
+	
+	}
+
+		function SendData(){
+			if (Object.keys(cart).length == 0) {
+				return;
+			}
+			// let sumprice = 0;
+			// let cartstring = "";
+			// for (let id in cart) {
+			// 	sumprice = sumprice + cart[id]['count'] * cart[id]['cost'];
+			// 	cartstring = cartstring + "\n name " + cart[id]['name'] + " count " + cart[id]['count'] + " cost " + cart[id]['cost'];
+			// }
+			arr=[];
+			i=0;
+			for(var key in cart){
+				arr.push({})
+				arr[i].code=key;
+				arr[i].name=cart[key]['name'];
+				arr[i].cost=cart[key]['cost'];
+				arr[i].count=cart[key]['count'];
+				i++;
+			}
+			itn = document.getElementById('itn').vsalue;
+			if(/[0-9]/.test(itn)){
+				arr[i]=itn;
+			}
+			else{
+				arr[i]=null;
+			}
+			//document.getElementById('').value;//itn input!!!!!!!!
+				send = JSON.stringify(arr)
+				tg.sendData(send); //при клике на основную кнопку отправляем данные в строковом виде}
+			};
 	</script>
 
-	<ul id="page1">
-		<li>
-			<button onclick="page2('ofd')" id="ofd" open=false class="btn">Подписки ОФД: &#8659</button>
-		</li>
-		<li>
-			<div id="ofd-type"></div>
-		</li>
-		<li>
-			<button onclick="page2()" id="another" open=false class="btn">Иные подписки: &#8659</button>
-		</li>
-		<li>
-			<div id="another-type"></div>
-		</li>
-	</ul>
-	<footer>
-		<ul>
-			<p>Наши контакты:</p>
-			<li id="footer-li">Телефон: +7-XXX-XXX-ХХ-ХХ</li>
-			<li id="footer-li">Почта: xxxxxx_xxxxx@xxxx.xx</li>
-		</ul>
-	</footer>
+		<header>
+			<h1>Cart for Telegram </h1>
+			<ul>
+				<li>
+					<button onclick="page2('ofd')" id="ofd" open=false class="menu_btn">Подписки ОФД: &#8659</button>
+				</li>
+				<li>
+					<button onclick="page2()" id="another" open=false class="menu_btn">Иные подписки: &#8659</button>
+				</li>
+				<li class="menu_cart">
+					<button onclick="Show_cart()" class="menu_cart_btn" >Корзина</button>
+				</li>
+			</ul>
+		</header>
+		<div id="ofd-type"></div>
+		<div id="another-type"></div>
+
+		<div style="display: none " id="cart">
+			<h2>Корзина</h2>
+			<ul  overflow-y='auto'>
+				<li class='cart_header cart_title'>Товар</li>
+				<li class='cart_header cart_quantity'>Количество</li>
+				<li class='cart_header cart_sumprice'>Стоимость</li>
+			</ul>
+			<div id="cart_goods" overflow-y='auto'></div>
+			<hr>
+			<div class="cart_itn">
+				<h3>Ваш ИНН</h3>
+				<input type="text" maxlength="6" minlength="6" size="8" placeholder="Ваш ИНН" id="itn">
+			</div>
+			<button onclick="SendData()" class="btn">Купить</button>
+		</div>
+
+
+		<footer>
+				<ul>
+					<p>Наши контакты:</p>
+					<li id="footer-li">Телефон: +7-XXX-XXX-ХХ-ХХ</li>
+					<li id="footer-li">Почта: xxxxxx_xxxxx@xxxx.xx</li>
+				</ul>
+		</footer>
 
 	<script>
       window.cart={};
-		range=[{
+		// var modal = $modal({
+  		// title: 'Текст заголовка',
+  		// content: '<p>Содержимое модального окна...</p>',
+  		// footerButtons: [
+		// 	{ class: 'btn btn__cancel', text: 'Отмена', handler: 'modalHandlerCancel' },
+		// 	{ class: 'btn btn__ok', text: 'ОК', handler: 'modalHandlerOk' }
+		// ]	
+		// });
+		window.range=[{
             id:'ofd1',
-            name:'ofd1',
+            name:'ofdhrjterykjtrhktrkuky',
             count:10,
             cost:110.5,
+				image:"img/filename.jpeg"
+            },
+            {
+            id:'ofd2',
+            name:'ofd2yukyky,ti,uyliuluilul',
+            count:22,
+            cost:30.3,
+				image:"img/filename.jpeg"
+            },
+				{
+            id:'ofd3',
+            name:'ofd1iluiluylyiuyliuylul',
+            count:10,
+            cost:110.5,
+				image:"img/filename.jpeg"
+            },
+				{
+            id:'ofd4',
+            name:'ofd1uiluiluluyly',
+            count:10,
+            cost:110.5,
+				image:"img/filename.jpeg"
+            },
+				{
+            id:'ofd5',
+            name:'ofduiluilylyllllluilill',
+            count:10,
+            cost:110.5,
+				image:"img/filename.jpeg"
             },
             {
             id:'ofd2',
             name:'ofd2',
             count:22,
             cost:30.3,
+				image:"img/filename.jpeg"
             },
 				{
             id:'ofd1',
             name:'ofd1',
             count:10,
             cost:110.5,
+				image:"img/filename.jpeg"
             },
 				{
             id:'ofd1',
             name:'ofd1',
             count:10,
             cost:110.5,
-            },
-				{
-            id:'ofd1',
-            name:'ofd1',
-            count:10,
-            cost:110.5,
-            },
-            {
-            id:'ofd2',
-            name:'ofd2',
-            count:22,
-            cost:30.3,
-            },
-				{
-            id:'ofd1',
-            name:'ofd1',
-            count:10,
-            cost:110.5,
-            },
-				{
-            id:'ofd1',
-            name:'ofd1',
-            count:10,
-            cost:110.5,
+				image:"img/filename.jpeg"
             }]
+
 		for (let i in range) {
 			let div = document.createElement('div');
 			div.setAttribute('class', 'product')
 
 			let image = document.createElement('img');
-			image.src = `img/tt.jpg`
+			image.src = `${range[i]['image']}`
 			image.setAttribute('class', 'product_img')
 			// image.src = `data:image/png;base64,${range[i]['image']}`
 			// image.setAttribute('width',300)
@@ -156,162 +366,57 @@
 			price.setAttribute('class','product_price')
 			div.appendChild(price); //добавляем 
 
-			let plus = document.createElement('input'); //создаем кнопку
-			plus.type = 'button';
-			plus.setAttribute('class', 'plus product_btn')
-			plus.setAttribute('value', '+')
-			plus.setAttribute('id', `${range[i]['id']}`)
+
+			let buy = document.createElement('input'); //создаем кнопку
+			buy.type = 'button';
+			buy.setAttribute('class', 'buy plus product_btn')
+			buy.setAttribute('value','Купить')
+			buy.setAttribute('id', `${range[i]['id']}`)
 			//plus.id=`${range[i]['code']}`;//можно повесить обработку для каждой кнопки индивидуально здгы.onclick = function minusFunction(){}
 			// minus.onclick = plusFunction(minus.id);
-         div.appendChild(plus); //добавляем 
+         div.appendChild(buy); //добавляем 
 
-			let minus = document.createElement('input'); //создаем кнопку
-			minus.type = 'button';
-			minus.setAttribute('class', 'minus product_btn')
-			minus.setAttribute('value', '-')
-			minus.setAttribute('id', `${range[i]['id']}`)
-			//minus.id=`${range[i]['code']}`;//можно повесить обработку для каждой кнопки индивидуально здгы.onclick = function minusFunction(){}
-			// minus.onclick = minusFunction(minus.id);
-			div.appendChild(minus);
 
-			let quantity = document.createElement('input');
-			quantity.type = 'number';
-			quantity.setAttribute('class', 'inputbox')
-			quantity.setAttribute('value', '0')
-			quantity.setAttribute('id', `c${range[i]['id']}`)
-			quantity.setAttribute('name', 'quantity')
-			quantity.setAttribute('readonly', true)
-			// quantity.setAttribute('style', "width: 25px")
-			div.appendChild(quantity);
+			// let plus = document.createElement('input'); //создаем кнопку
+			// plus.type = 'button';
+			// plus.setAttribute('class', 'plus product_btn')
+			// plus.setAttribute('value', '+')
+			// plus.setAttribute('id', `${range[i]['id']}`)
+			// //plus.id=`${range[i]['code']}`;//можно повесить обработку для каждой кнопки индивидуально здгы.onclick = function minusFunction(){}
+			// // minus.onclick = plusFunction(minus.id);
+         // div.appendChild(plus); //добавляем 
+
+			// let minus = document.createElement('input'); //создаем кнопку
+			// minus.type = 'button';
+			// minus.setAttribute('class', 'minus product_btn')
+			// minus.setAttribute('value', '-')
+			// minus.setAttribute('id', `${range[i]['id']}`)
+			// //minus.id=`${range[i]['code']}`;//можно повесить обработку для каждой кнопки индивидуально здгы.onclick = function minusFunction(){}
+			// // minus.onclick = minusFunction(minus.id);
+			// div.appendChild(minus);
+
+			// let quantity = document.createElement('input');
+			// quantity.type = 'number';
+			// quantity.setAttribute('class', 'inputbox')
+			// quantity.setAttribute('value', 0)
+			// quantity.setAttribute('id', `c${range[i]['id']}`)
+			// quantity.setAttribute('name', 'quantity')
+			// quantity.setAttribute('readonly', true)
+			// // quantity.setAttribute('style', "width: 25px")
+			// div.appendChild(quantity);
 			document.getElementById('ofd-type').appendChild(div)
-			// document.body.append(div);
+			// // document.body.append(div);
 
 			range[range[i]['id']] = {
 				name: range[i]['name'],
 				cost: range[i]['cost'],
 				count: range[i]['count'],
+				image: range[i]['image']
 			}; //count->resr
-			// delete range[i];
+			delete range[i];
 		}
-
-         //увеличение количества товар
-         const plusFunction =id=>{
-         if(range[id]['count'] == 0){
-               return }
-         if((id in cart) === false){
-            cart[id] = {name:range[id]['name'],
-                     cost:range[id]['cost'],
-                     count:0}
-            cart[id]['count']=1;
-         }
-         else{
-            if(cart[id]['count'] == range[id]['count'] ){
-               return }
-            cart[id]['count']++;
-         }
-         var qty_el = document.getElementById('c'+id); var qty = qty_el.value; if( !isNaN( qty )) qty_el.value++;return false;
-      }
-
-
-      // уменьшение количества товара
-      const minusFunction =id=>{
-         if ((id in cart) === false){
-            return true;
-         }
-         else if (cart[id]['count']-1==0){
-               deleteFunctiom(id);
-               return true;
-            }
-         
-         cart[id]['count']--;
-         var qty_el = document.getElementById('c'+id); var qty = qty_el.value; if( !isNaN( qty )) qty_el.value--;return false;
-      }
-
-
-      // удаление товара
-      const deleteFunctiom = id=>{
-         delete cart[id];
-         var qty_el = document.getElementById('c'+id); var qty = qty_el.value; if( !isNaN( qty )) qty_el.value=0;return false;
-      }
-
-
-      // //вывести содержимое корзины 
-      // const showCartFunction=cart=>{
-
-      // if(Object.keys(cart).length==0){
-      //    return;
-      // }
-      // else{
-      // let sumprice=0;
-      // let cartstring="";
-      // for(let id in cart){
-      //    sumprice = sumprice+cart[id]['count']*cart[id]['cost'];
-      //    cartstring=cartstring+"\n name "+ cart[id]['name']+" count "+cart[id]['count']+ " cost "+cart[id]['cost'];
-      // }
-      // alert("sum = "+sumprice + "\n"+ cartstring);
-      // }
-      // }
-
-
-      document.onclick = event=>{
-         if(event.target.classList.contains('plus')){
-            plusFunction(event.target.id);
-            console.log(cart)
-         }
-         if(event.target.classList.contains('minus')){
-            minusFunction(event.target.id);
-            console.log(cart)
-         }
-         if(event.target.classList.contains('show')){
-         showCartFunction(cart);
-         }
-      }
-
-
-
-
-
-		let tg = window.Telegram.WebApp; //получаем объект webapp телеграма 
-		tg.expand(); //расширяем на все окно
-		tg.MainButton.text = "Купить"; //изменяем текст кнопки
-		tg.MainButton.textColor = "#F55353"; //изменяем цвет текста кнопки
-		tg.MainButton.show()
-		Telegram.WebApp.onEvent('mainButtonClicked', function() {
-			if (Object.keys(window.cart).length == 0) {
-				return;
-			}
-			// let sumprice = 0;
-			// let cartstring = "";
-			// for (let id in cart) {
-			// 	sumprice = sumprice + cart[id]['count'] * cart[id]['cost'];
-			// 	cartstring = cartstring + "\n name " + cart[id]['name'] + " count " + cart[id]['count'] + " cost " + cart[id]['cost'];
-			// }
-			arr=[];
-			i=0;
-			for(var key in cart){
-				arr.push({})
-				arr[i].code=key;
-				arr[i].name=cart[key]['name'];
-				arr[i].cost=cart[key]['cost'];
-				arr[i].count=cart[key]['count'];
-				i++;
-			}
-			itn = prompt('Введите ИНН','Ваш ИНН');
-
-			if(/[0-9]/.test(itn) && itn.length==6){
-				arr[i]=itn;
-			}
-			else{
-				arr[i]=null;
-			}
-			//document.getElementById('').value;//itn input!!!!!!!!
-				send = JSON.stringify(arr)
-				tg.sendData(send); //при клике на основную кнопку отправляем данные в строковом виде}
-		});
+		console.log(range)
 	</script>
-
 </body>
 
 </html>
-
-
