@@ -20,8 +20,8 @@
 		let tg = window.Telegram.WebApp; //получаем объект webapp телеграма 
 		tg.expand(); //расширяем на все окно
 		tg.MainButton.text = "Корзина"; //изменяем текст кнопки
-		tg.MainButton.color = '#FFFFFF'// цвет кнопки
-		tg.MainButton.textColor = "#4CAF50"; // цвет текста
+		tg.MainButton.color = '#4CAF50'// цвет кнопки
+		tg.MainButton.textColor = "#FFFFFF"; // цвет текста
 		tg.MainButton.show()
 		Telegram.WebApp.onEvent('mainButtonClicked', function() {
 			tg.MainButton.hide()
