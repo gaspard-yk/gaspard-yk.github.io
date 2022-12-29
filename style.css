@@ -1,4 +1,8 @@
+html{
+   height: 100%;
+}
 body{
+height: 100%;
 margin: 0;
  padding: 0;
  background-color: #dcfae3;
@@ -8,12 +12,17 @@ margin: 0;
  justify-content: center;
  align-items: center;
 }
+.wrapper{
+   min-height: 100%;
+   display: flex;
+   flex-direction: column;
+}
 header{
    padding-top: 1%;
    background-color:#4CAF50;
    text-align: center;
    color: #000;
-  }
+}
 h1{
    font-size: 2vw;
    color: white;
@@ -57,6 +66,9 @@ li:last-child {
 }
 
 
+.main{
+   flex: 1 1 auto;
+}
 #ofd-type,another-type{
    justify-content: center;
    box-sizing: border-box;
@@ -65,25 +77,6 @@ li:last-child {
    flex-flow: row wrap;
    display: none;
 }
-/* #another-type{
-   display: none;
-} */
-
-footer {
-   margin: 0,2px,2px,2px; /* Обнуляем значение отступов */
-   padding: 2px; /* Значение полей */
-   width: 100%;
-   padding: 2px;
-   
-   /* position: fixed; */
-   bottom: 0; /* Левый нижний угол */
-  }
-#footer-li {
-   font-size: 14pt;
-   display: inline; /* Отображать как строчный элемент */
-   border: 1px solid #000; /* Рамка вокруг текста */
-   padding: 5px; /* Поля вокруг текста */
-  }
 .product{
    align-items: center;
    text-align: center;
@@ -126,6 +119,23 @@ img {
    max-width: 33%;
    border-radius: 5px;
 }
+
+footer h1{
+   margin: 0;
+   padding: 1vh 1vw 1vh 1vw;
+   background-color:#4CAF50;
+}
+footer li{
+   border: 1px solid #000;
+   color: white;
+   font-size: 1vw;
+   text-align: center;
+   width: 30%;
+   background-color: #333;
+   float: left;
+   padding: 1vh 1vw 1vh 1vw;
+}
+
 
 #cart{
  width: 70%;
@@ -366,4 +376,24 @@ margin-left: 44%;
    margin-top: 2vh;
    margin-left: 35%;
    }
+   footer{
+      margin-top: 2vh;
+   }
+   footer h1{
+      margin: 0;
+      font-size: 5vw;
+      padding: 1vh 1vw 1vh 1vw;
+      background-color:#4CAF50;
+   }
+   footer li{
+      width: 100%;
+      color: white;
+      font-size: 4vw;
+      text-align: left;
+      background-color: #333;
+      float: left;
+      padding: 1vh 1vw 1vh 1vw;
+   }
+
 }
+
