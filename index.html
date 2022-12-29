@@ -146,9 +146,10 @@
 			title.setAttribute('class', 'cart_product_title')
 			div.appendChild(title); //добавляем 
 
-			let plus = document.createElement('input'); //создаем кнопку
-			plus.type = 'button';
+			let plus = document.createElement('button'); //создаем кнопку
+			// plus.type = 'button';
 			plus.setAttribute('class', 'plus cart_product_plus')
+			plus.innerHTML='+'
 			plus.setAttribute('value', '+')
 			plus.setAttribute('id', `${i}`)
 			//plus.id=`${range[i]['code']}`;//можно повесить обработку для каждой кнопки индивидуально здгы.onclick = function minusFunction(){}
@@ -184,7 +185,8 @@
 			document.getElementById('cart_goods').appendChild(div)
 
 		}
-			$.fancybox.open({
+		$.fancybox.open({
+		padding: [0, 0, 0, 0],
 		src: '#cart',
 		type: 'inline',
 		closeClickOutside : false,
@@ -246,7 +248,7 @@
 		<div id="ofd-type"></div>
 		<div id="another-type"></div>
 
-		<div style="display: none " id="cart">
+		<div style="display: none " id="cart" >
 			<h2>Корзина</h2>
 			<ul  overflow-y='auto'>
 				<li class='cart_header cart_title'>Товар</li>
@@ -257,7 +259,7 @@
 			<hr>
 			<div class="cart_itn">
 				<h3>Ваш ИНН</h3>
-				<input type="text" maxlength="6" minlength="6" size="8" placeholder="Ваш ИНН" id="itn">
+				<input type="text" maxlength="6" minlength="6" size="6" placeholder="Ваш ИНН" id="itn">
 			</div>
 			<button onclick="SendData()" class="btn">Купить</button>
 		</div>
@@ -420,3 +422,4 @@
 </body>
 
 </html>
+
