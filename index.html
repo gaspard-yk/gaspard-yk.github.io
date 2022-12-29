@@ -17,15 +17,16 @@
 
 <body>
 	<script>
-		let tg = window.Telegram.WebApp; //получаем объект webapp телеграма 
+		window.tg = window.Telegram.WebApp; //получаем объект webapp телеграма 
 		tg.expand(); //расширяем на все окно
-		tg.MainButton.text = "Корзина"; //изменяем текст кнопки
-		tg.MainButton.color = '#4CAF50'// цвет кнопки
-		tg.MainButton.textColor = "#FFFFFF"; // цвет текста
-		tg.MainButton.show()
+		tg.MainButton.text = "Купить"; //изменяем текст кнопки
+		tg.MainButton.color = '#FFFFFF'// цвет кнопки
+		tg.MainButton.textColor = "#4CAF50"; // цвет текста
+		// tg.MainButton.show()
 		Telegram.WebApp.onEvent('mainButtonClicked', function() {
-			tg.MainButton.hide()
-			Show_cart();
+			// tg.MainButton.hide()
+			// Show_cart();
+			SendData();
 		})
 		//увеличение количества товар
 		const plusFunction =id=>{
@@ -131,6 +132,7 @@
 		}
 
 		function Show_cart(){
+			tg.MainButton.show();
 			for (let i in cart) {
 
 			let div = document.createElement('div');
@@ -194,7 +196,8 @@
 		opts:{
 			afterClose: function() {
 			document.getElementById('cart_goods').innerHTML='';
-			tg.MainButton.show();
+			// tg.MainButton.show();
+			tg.MainButton.hide()
 		}}});
 	
 	}
@@ -232,22 +235,34 @@
 			};
 	</script>
 
-		<header>
-			<h1>Cart for Telegram </h1>
-			<ul>
-				<li>
-					<button onclick="page2('ofd')" id="ofd" open=false class="menu_btn">Подписки ОФД: &#8659</button>
-				</li>
-				<li>
-					<button onclick="page2()" id="another" open=false class="menu_btn">Иные подписки: &#8659</button>
-				</li>
-				<li class="menu_cart">
-					<button onclick="Show_cart()" class="menu_cart_btn" >Корзина</button>
-				</li>
-			</ul>
-		</header>
-		<div id="ofd-type"></div>
-		<div id="another-type"></div>
+		<div class="wrapper">
+			<header>
+				<h1>Cart for Telegram </h1>
+				<ul>
+					<li>
+						<button onclick="page2('ofd')" id="ofd" open=false class="menu_btn">Подписки ОФД: &#8659</button>
+					</li>
+					<li>
+						<button onclick="page2()" id="another" open=false class="menu_btn">Иные подписки: &#8659</button>
+					</li>
+					<li class="menu_cart">
+						<button onclick="Show_cart()" class="menu_cart_btn" >Корзина</button>
+					</li>
+				</ul>
+			</header>
+			<div class="main">
+				<div id="ofd-type"></div>
+				<div id="another-type"></div>
+			</div>
+			<footer>
+				<ul>
+					<h1>Наши контакты:</h1>
+					<li class="footer-li">Телефон: +7-XXX-XXX-ХХ-ХХ</li>
+					<li id="footer-li">Почта: xxxxxx_xxxxx@xxxx.xx</li>
+				</ul>
+			</footer>
+		</div>
+
 
 		<div style="display: none " id="cart" >
 			<h2>Корзина</h2>
@@ -266,13 +281,6 @@
 		</div>
 
 
-		<footer>
-				<ul>
-					<p>Наши контакты:</p>
-					<li id="footer-li">Телефон: +7-XXX-XXX-ХХ-ХХ</li>
-					<li id="footer-li">Почта: xxxxxx_xxxxx@xxxx.xx</li>
-				</ul>
-		</footer>
 
 	<script>
       window.cart={};
@@ -423,4 +431,5 @@
 </body>
 
 </html>
+
 
