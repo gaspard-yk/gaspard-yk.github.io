@@ -32,23 +32,23 @@
 		const plusFunction =id=>{
 		if(range[id]['count'] == 0){
 				return }
-		if((id in cart) === false){ 
+		if((id in cart) === false){
 			cart[id] = {name:range[id]['name'],
 						cost:range[id]['cost'],
 						count:0}
 			cart[id]['count']=1;
+			document.getElementById('c'+id).style.display = 'block';
 			return
 		}
 		else{
 			if(cart[id]['count'] == range[id]['count'] ){
 				return }
 			cart[id]['count']++;
+			document.getElementById('c'+id).value= cart[id]['count']; 
+			document.getElementById('q'+id).value= cart[id]['count']; 
+		   document.getElementById('s'+id).value= cart[id]['count']*cart[id].cost; 
 		}
 			// var qty_el = document.getElementById('q'+id); var qty = qty_el.value; if( !isNaN( qty )) qty_el.value++;return false;
-		if(document.getElementById(`product ${id}`)!=null){
-		document.getElementById('q'+id).value= parseInt(document.getElementById('q'+id).value)+1; 
-		document.getElementById('s'+id).value= parseInt(document.getElementById('q'+id).value)*cart[id].cost; 
-		}
 		}
 		
 		
@@ -61,11 +61,10 @@
                return true;
             }
          cart[id]['count']--;
-			if(document.getElementById(`product ${id}`)!=null){
+			document.getElementById('c'+id).value= cart[id]['count']; 
+			document.getElementById('q'+id).value= cart[id]['count']; 
+		   document.getElementById('s'+id).value= cart[id]['count']*cart[id].cost; 
          // var qty_el = document.getElementById('q'+id); var qty = qty_el.value; if( !isNaN( qty )) qty_el.value--;return false;
-			document.getElementById('q'+id).value= parseInt(document.getElementById('q'+id).value)-1; 
-			document.getElementById('s'+id).value= parseInt(document.getElementById('q'+id).value)*cart[id].cost; 
-			}
       }
       
 		
@@ -74,6 +73,7 @@
          delete cart[id];
          // document.getElementById('q'+id).value=0; 
  			document.getElementById(`product ${id}`).remove();
+			document.getElementById('c'+id).style.display = 'none';
       }
 		
 		
@@ -199,11 +199,57 @@
 			// tg.MainButton.show();
 			tg.MainButton.hide()
 		}}});
-	
+		
+		input = document.getElementById('itn');
+		input.oninput = function(){
+			if(input.value.length==0){//input.value.length!=10 ||
+				document.getElementById('itn').style.borderColor = "black"; 
+				document.getElementById('err_msg').style.display='none';
+			}
+			else if(input.value.length!=12){//input.value.length!=10 ||
+				document.getElementById('itn').style.borderColor = "red"; 
+				document.getElementById('err_msg').style.display='block';
+			}
+			else{ 
+				contr_sum1=parseInt(input.value[0])*7+
+							 parseInt(input.value[1])*2+
+							 parseInt(input.value[2])*4+
+							 parseInt(input.value[3])*10+
+							 parseInt(input.value[4])*3+
+							 parseInt(input.value[5])*5+
+							 parseInt(input.value[6])*9+
+							 parseInt(input.value[7])*4+
+							 parseInt(input.value[8])*6+
+							 parseInt(input.value[9])*8;
+				contr_ch1=contr_sum1 % 11;
+				if(contr_ch1>9) contr_ch1= contr_ch1 % 10;
+				contr_sum2=parseInt(input.value[0])*3+
+							 parseInt(input.value[1])*7+
+							 parseInt(input.value[2])*2+
+							 parseInt(input.value[3])*4+
+							 parseInt(input.value[4])*10+
+							 parseInt(input.value[5])*3+
+							 parseInt(input.value[6])*5+
+							 parseInt(input.value[7])*9+
+							 parseInt(input.value[8])*4+
+							 parseInt(input.value[9])*6+
+							 parseInt(input.value[10])*8;
+				contr_ch2=contr_sum2 % 11;
+				if(contr_ch2>9) contr_ch2= contr_ch2 % 10;
+
+				if(contr_ch1==input.value[10] && contr_ch2==input.value[11]){
+					document.getElementById('err_msg').style.display='none'
+					document.getElementById('itn').style.borderColor = "black"; 
+				}
+			}
+		}
 	}
 
 		function SendData(){
 			if (Object.keys(cart).length == 0) {
+				return;
+			}
+			if(document.getElementById('err_msg').style.display != "none"){
 				return;
 			}
 			// let sumprice = 0;
@@ -223,7 +269,7 @@
 				i++;
 			}
 			itn = document.getElementById('itn').value;
-			if(/[0-9]/.test(itn)){
+			if(itn.length==12){
 				arr[i]=itn;
 			}
 			else{
@@ -273,10 +319,9 @@
 			</ul>
 			<div id="cart_goods" overflow-y='auto'></div>
 			<hr>
-			<div class="cart_itn">
-				<h3>Ваш ИНН</h3>
-				<input type="text" maxlength="6" minlength="6" size="6" placeholder="Ваш ИНН" id="itn">
-			</div>
+			<h3>Если Вам нужны закрывающие документы для бухгалтерии, заполните, пожалуйста, ИНН организации, и мы вышлем их Вам на электронную почту, а также, по возможности, по ЭДО. </h3>
+			<input type="number" placeholder="Ваш ИНН" id="itn">
+			<h4 id="err_msg">Неправильный ИНН</h4>
 			<button onclick="SendData()" class="btn">Купить</button>
 		</div>
 
@@ -350,44 +395,49 @@
             }]
 
 		for (let i in range) {
-			let div = document.createElement('div');
-			div.setAttribute('class', 'product')
+			if(range[i]['count']!=0){
+				let div = document.createElement('div');
+				div.setAttribute('class', 'product')
 
-			let image = document.createElement('img');
-			image.src = `${range[i]['image']}`
-			image.setAttribute('class', 'product_img')
-			// image.src = `data:image/png;base64,${range[i]['image']}`
-			// image.setAttribute('width',300)
-			// image.setAttribute('height',300)
-			div.appendChild(image);
-
-
-			let title = document.createElement('p'); //создаем еще параграф 
-			title.innerText = `${range[i]['name']}`;
-			title.setAttribute('class', 'product_title')
-			div.appendChild(title); //добавляем 
-
-			let count = document.createElement('p'); //count -> rest
-			count.innerText = `В наличии ${range[i]['count']} шт.`;
-			count.setAttribute('class','product_count')
-			div.appendChild(count); //добавляем 
-
-			let price = document.createElement('p'); //создаем еще параграф 
-			price.innerText = `Цена = ${range[i]['cost']}`;
-			price.setAttribute('class','product_price')
-			div.appendChild(price); //добавляем 
+				let image = document.createElement('img');
+				image.src = `${range[i]['image']}`
+				image.setAttribute('class', 'product_img')
+				// image.src = `data:image/png;base64,${range[i]['image']}`
+				// image.setAttribute('width',300)
+				// image.setAttribute('height',300)
+				div.appendChild(image);
 
 
-			let buy = document.createElement('input'); //создаем кнопку
-			buy.type = 'button';
-			buy.setAttribute('class', 'buy plus product_btn')
-			buy.setAttribute('value','Купить')
-			buy.setAttribute('id', `${range[i]['id']}`)
-			//plus.id=`${range[i]['code']}`;//можно повесить обработку для каждой кнопки индивидуально здгы.onclick = function minusFunction(){}
-			// minus.onclick = plusFunction(minus.id);
-         div.appendChild(buy); //добавляем 
+				let title = document.createElement('p'); //создаем еще параграф 
+				title.innerText = `${range[i]['name']}`;
+				title.setAttribute('class', 'product_title')
+				div.appendChild(title); //добавляем 
+
+				let count = document.createElement('input'); //count -> rest
+				count.type = 'text';
+				count.setAttribute('class','product_count')
+				count.setAttribute('value', `1`)
+				count.setAttribute('id', `c${range[i]['id']}`)
+				count.setAttribute('readonly', true)
+				div.appendChild(count); //добавляем 
+
+				let price = document.createElement('p'); //создаем еще параграф 
+				price.innerText = `${range[i]['cost']} р`;
+				price.setAttribute('class','product_price')
+				div.appendChild(price); //добавляем 
 
 
+				let buy = document.createElement('input'); //создаем кнопку
+				buy.type = 'button';
+				buy.setAttribute('class', 'buy plus product_btn')
+				buy.setAttribute('value','Купить')
+				buy.setAttribute('id', `${range[i]['id']}`)
+				//plus.id=`${range[i]['code']}`;//можно повесить обработку для каждой кнопки индивидуально здгы.onclick = function minusFunction(){}
+				// minus.onclick = plusFunction(minus.id);
+				div.appendChild(buy); //добавляем 
+				document.getElementById('ofd-type').appendChild(div)
+			}
+			
 			// let plus = document.createElement('input'); //создаем кнопку
 			// plus.type = 'button';
 			// plus.setAttribute('class', 'plus product_btn')
@@ -415,8 +465,6 @@
 			// quantity.setAttribute('readonly', true)
 			// // quantity.setAttribute('style', "width: 25px")
 			// div.appendChild(quantity);
-			document.getElementById('ofd-type').appendChild(div)
-			// // document.body.append(div);
 
 			range[range[i]['id']] = {
 				name: range[i]['name'],
@@ -426,10 +474,9 @@
 			}; //count->resr
 			delete range[i];
 		}
-		console.log(range)
+		// console.log(range)
 	</script>
 </body>
 
 </html>
-
 
