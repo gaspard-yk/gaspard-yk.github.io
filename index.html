@@ -242,7 +242,8 @@
 			// tg.MainButton.show();
 			tg.MainButton.hide()
 		}}});
-		
+			
+		document.getElementById('err_msg').style.display='none';
 		input = document.getElementById('itn');
 		input.oninput = function(){
 			if(input.value.length==0){//input.value.length!=10 ||
@@ -367,7 +368,7 @@
 			<p class="itn_msg">Если Вам нужны закрывающие документы для бухгалтерии, заполните, пожалуйста, ИНН организации, и мы вышлем их Вам на электронную почту, а также, по возможности, по ЭДО. </p>
 			<input type="number" placeholder="Ваш ИНН" id="itn">
 			<p id="err_msg">Неправильный ИНН</p>
-			<button onclick="Send()" class="btn">Купить</button>
+<!-- 			<button onclick="Send()" class="btn">Купить</button> -->
 		</div>
 
 
