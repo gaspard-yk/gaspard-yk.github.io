@@ -28,53 +28,82 @@
 			// Show_cart();
 			SendData();
 		})
+
+
 		//увеличение количества товар
 		const plusFunction =id=>{
-		if(range[id]['count'] == 0){
-				return }
-		if((id in cart) === false){
-			cart[id] = {name:range[id]['name'],
-						cost:range[id]['cost'],
-						count:0}
-			cart[id]['count']=1;
-			document.getElementById('c'+id).style.display = 'block';
-			return
-		}
-		else{
-			if(cart[id]['count'] == range[id]['count'] ){
-				return }
-			cart[id]['count']++;
-			document.getElementById('c'+id).value= cart[id]['count']; 
-			document.getElementById('q'+id).value= cart[id]['count']; 
-		   document.getElementById('s'+id).value= cart[id]['count']*cart[id].cost; 
-		}
-			// var qty_el = document.getElementById('q'+id); var qty = qty_el.value; if( !isNaN( qty )) qty_el.value++;return false;
+			console.log(cart)
+			// if(range[id]['count'] == 0){
+			// 		return }
+			if((id in cart) === false){
+				cart[id] = {name:range[id]['name'],
+								cost:range[id]['cost'],
+								count:1}
+				cart_sumprice+=cart[id].cost;
+				document.getElementById('cart_sumprice_value').innerHTML=cart_sumprice.toFixed(2);
+				document.getElementById('c'+id).style.display = 'block';
+				return
+			}
+			else if(cart[id]['count'] == range[id]['count'] ){
+				return
+			}
+			else{
+				cart[id]['count']++;
+				document.getElementById('c'+id).value= cart[id]['count']; 
+				cart_sumprice+=cart[id].cost;
+				document.getElementById('cart_sumprice_value').innerHTML=cart_sumprice.toFixed(2);
+				if(document.getElementById(`product ${id}`)){
+				document.getElementById('q'+id).value= cart[id]['count']; 
+				document.getElementById('s'+id).value= cart[id]['count']*cart[id].cost; 
+				}
+			}
 		}
 		
 		
-		const minusFunction =id=>{
-         if ((id in cart) === false){
-            return true;
-         }
-         else if (cart[id]['count']-1==0){
-               deleteFunctiom(id);
-               return true;
-            }
-         cart[id]['count']--;
-			document.getElementById('c'+id).value= cart[id]['count']; 
-			document.getElementById('q'+id).value= cart[id]['count']; 
-		   document.getElementById('s'+id).value= cart[id]['count']*cart[id].cost; 
-         // var qty_el = document.getElementById('q'+id); var qty = qty_el.value; if( !isNaN( qty )) qty_el.value--;return false;
-      }
+		// const minusFunction =id=>{
+      //    if ((id in cart) === false){
+      //       return true;
+      //    }
+      //    else if (cart[id]['count']-1==0){
+      //          deleteFunctiom(id);
+      //          return true;
+      //       }
+      //    cart[id]['count']--;
+		// 	document.getElementById('c'+id).value= cart[id]['count']; 
+		// 	document.getElementById('q'+id).value= cart[id]['count']; 
+		//    document.getElementById('s'+id).value= cart[id]['count']*cart[id].cost; 
+      //    // var qty_el = document.getElementById('q'+id); var qty = qty_el.value; if( !isNaN( qty )) qty_el.value--;return false;
+      // }
       
 		
 		// удаление товара
-      const deleteFunctiom = id=>{
-         delete cart[id];
-         // document.getElementById('q'+id).value=0; 
- 			document.getElementById(`product ${id}`).remove();
-			document.getElementById('c'+id).style.display = 'none';
-      }
+      // const deleteFunctiom = id=>{
+      //    delete cart[id];
+      //    // document.getElementById('q'+id).value=0; 
+ 		// 	document.getElementById(`product ${id}`).remove();
+		// 	document.getElementById('c'+id).style.display = 'none';
+      // }
+
+		function DeleteAll(id){
+			if(id=='allcart'){
+				for (pr_id in cart){
+				delete(cart[pr_id])
+				document.getElementById(`product ${pr_id}`).remove();
+				document.getElementById('c'+pr_id).value= 1; 
+				document.getElementById('c'+pr_id).style.display = 'none';
+			}
+			cart_sumprice=0;
+			document.getElementById('cart_sumprice_value').innerHTML=cart_sumprice.toFixed(2);
+			}
+			else{
+				document.getElementById(`product ${id}`).remove();
+				document.getElementById('c'+id).style.display = 'none';
+				document.getElementById('c'+id).value= 1; 
+				cart_sumprice-=cart[id].cost*cart[id].count;
+				document.getElementById('cart_sumprice_value').innerHTML=cart_sumprice.toFixed(2);
+				delete(cart[id])
+			}
+		}
 		
 		
 		document.onclick = event=>{
@@ -85,6 +114,10 @@
          }
          if(event.target.classList.contains('minus')){
             minusFunction(event.target.id);
+            // console.log(cart)
+         }
+			if(event.target.classList.contains('del_btn')){
+            DeleteAll(event.target.id);
             // console.log(cart)
          }
          // if(event.target.classList.contains('show')){
@@ -136,28 +169,37 @@
 			for (let i in cart) {
 
 			let div = document.createElement('div');
-			div.setAttribute('class', 'cart_product')
-			div.setAttribute('id', `product ${i}`)
+			div.setAttribute('class', 'cart_product');
+			div.setAttribute('id', `product ${i}`);
+			
+			let del = document.createElement('button'); //создаем кнопку
+			del.setAttribute('class', 'del_btn')
+			del.innerHTML='&#10006'
+			del.setAttribute('id', `${i}`)
+			//plus.id=`${range[i]['code']}`;//можно повесить обработку для каждой кнопки индивидуально здгы.onclick = function minusFunction(){}
+			// minus.onclick = plusFunction(minus.id);
+         div.appendChild(del); //добавляем 
+
 
 			let image = document.createElement('img');
 			image.src = `${range[i].image}`
 			image.setAttribute('class', 'cart_product_img')
 			div.appendChild(image);
 
-			let title = document.createElement('p'); //создаем еще параграф 
-			title.innerHTML = `${cart[i]['name']}`;
-			title.setAttribute('class', 'cart_product_title')
-			div.appendChild(title); //добавляем 
+			// let title = document.createElement('p'); //создаем еще параграф 
+			// title.innerHTML = `${cart[i]['name']}`;
+			// title.setAttribute('class', 'cart_product_title')
+			// div.appendChild(title); //добавляем 
 
-			let plus = document.createElement('button'); //создаем кнопку
-			// plus.type = 'button';
-			plus.setAttribute('class', 'plus cart_product_plus')
-			plus.innerHTML='+'
-			plus.setAttribute('value', '+')
-			plus.setAttribute('id', `${i}`)
-			//plus.id=`${range[i]['code']}`;//можно повесить обработку для каждой кнопки индивидуально здгы.onclick = function minusFunction(){}
-			// minus.onclick = plusFunction(minus.id);
-         div.appendChild(plus); //добавляем 
+			// let plus = document.createElement('button'); //создаем кнопку
+			// // plus.type = 'button';
+			// plus.setAttribute('class', 'plus cart_product_plus')
+			// plus.innerHTML='+'
+			// plus.setAttribute('value', '+')
+			// plus.setAttribute('id', `${i}`)
+			// //plus.id=`${range[i]['code']}`;//можно повесить обработку для каждой кнопки индивидуально здгы.onclick = function minusFunction(){}
+			// // minus.onclick = plusFunction(minus.id);
+         // div.appendChild(plus); //добавляем 
 
 			let quantity = document.createElement('input');
 			quantity.type = 'text';
@@ -168,14 +210,14 @@
 			// quantity.setAttribute('style', "width: 25px")
 			div.appendChild(quantity);
 
-			let minus = document.createElement('input'); //создаем кнопку
-			minus.type = 'button';
-			minus.setAttribute('class', 'minus  cart_product_minus')
-			minus.setAttribute('value', '-')
-			minus.setAttribute('id', `${i}`)
-			//minus.id=`${range[i]['code']}`;//можно повесить обработку для каждой кнопки индивидуально здгы.onclick = function minusFunction(){}
-			// minus.onclick = minusFunction(minus.id);
-			div.appendChild(minus);
+			// let minus = document.createElement('input'); //создаем кнопку
+			// minus.type = 'button';
+			// minus.setAttribute('class', 'minus  cart_product_minus')
+			// minus.setAttribute('value', '-')
+			// minus.setAttribute('id', `${i}`)
+			// //minus.id=`${range[i]['code']}`;//можно повесить обработку для каждой кнопки индивидуально здгы.onclick = function minusFunction(){}
+			// // minus.onclick = minusFunction(minus.id);
+			// div.appendChild(minus);
 
 			let sumprice = document.createElement('input'); //создаем еще параграф 
 			sumprice.type = 'text';
@@ -311,7 +353,8 @@
 
 
 		<div style="display: none " id="cart" >
-			<h2>Корзина</h2>
+				<button class="delete_all" onclick="DeleteAll('allcart')">Очистить корзину</button> 
+					<h2>Корзина</h2>
 			<ul  overflow-y='auto'>
 				<li class='cart_header cart_title'>Товар</li>
 				<li class='cart_header cart_quantity'>Количество</li>
@@ -319,9 +362,10 @@
 			</ul>
 			<div id="cart_goods" overflow-y='auto'></div>
 			<hr>
-			<h3>Если Вам нужны закрывающие документы для бухгалтерии, заполните, пожалуйста, ИНН организации, и мы вышлем их Вам на электронную почту, а также, по возможности, по ЭДО. </h3>
+			<p id="cart_sum">Итого: <value id="cart_sumprice_value">0.00</value></p>
+			<p class="itn_msg">Если Вам нужны закрывающие документы для бухгалтерии, заполните, пожалуйста, ИНН организации, и мы вышлем их Вам на электронную почту, а также, по возможности, по ЭДО. </p>
 			<input type="number" placeholder="Ваш ИНН" id="itn">
-			<h4 id="err_msg">Неправильный ИНН</h4>
+			<p id="err_msg">Неправильный ИНН</p>
 			<button onclick="SendData()" class="btn">Купить</button>
 		</div>
 
@@ -329,6 +373,7 @@
 
 	<script>
       window.cart={};
+		window.cart_sumprice=0;
 		// var modal = $modal({
   		// title: 'Текст заголовка',
   		// content: '<p>Содержимое модального окна...</p>',
