@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task 1"</title>
+  </head>
+
+  <body>
+
+    <main>
+   <div name="task1">
+      <script>
+         function welcome(){
+            if(document.getElementById('name').value ==''||
+               document.getElementById('surname').vale ==''||
+               document.getElementById('patronymic').value ==''||
+               document.getElementById('age').value <1)
+               {
+                  alert('err')
+               }
+            else if (document.getElementById('age').value <=6){
+               alert('hi '+ document.getElementById('name').value)
+            }
+            else if (document.getElementById('age').value <=18){
+               alert('hi '+ document.getElementById('surname').value)
+            }
+            else {
+               alert('hi '+ document.getElementById('name').value + ' '+ document.getElementById('patronymic').value)
+            }
+         }
+      </script>
+      <input type="text" id="name" placeholder="Ваше имя">
+      <input type="text" id="surname" placeholder="Ваша фамилия" >
+      <input type="text" id="patronymic"  placeholder="Ваше отчество">
+      <input type='number' id="age" size="3" min="1" placeholder="Ваше возраст">
+      <button onclick="welcome()">Welcome</button>
+   </div>
+   <hr>
+
+   <div name="task2">
+      <script>
+         function divide(d1,d2){
+            if(d1 ==''||
+               d2 =='')
+               {
+                  alert('err')
+               }
+            else if (d2 ==0){
+               alert('not zero pls')
+            }
+            else {
+               alert(`= ${Math.trunc(d1/d2)} , остаток = ${d1%d2}`);
+            }
+         }
+      </script>
+      <input type='number' id="d1"  placeholder="Делимое">
+      <input type='number' id="d2"  placeholder="Делитель">
+      <button onclick="divide(document.getElementById('d1').value,document.getElementById('d2').value)">divide</button>
+   </div>
+   <hr>
+
+   <div name="task3">
+      <script>
+         function day(day){
+            if(day <1 || day >7){;
+                  alert('err'+ f)
+               }
+            else {
+           switch(day){
+            case '1': alert('Monday');break;
+            case '2': alert('Tuesday');break;
+            case '3': alert('Wednesday');break;
+            case '4': alert('Thursday');break;
+            case '5': alert('Friday');break;
+            case '6': alert('Saturday ');break;
+            case '7': alert(' Sunday');break;
+           }
+               }
+      }
+      </script>
+      <input type='number' id="day"  placeholder="День">
+      <button onclick="day(document.getElementById('day').value)">day</button>
+   </div>
+   <hr>
+
+   <div name="task4">
+      <script>
+         function t4(length_wagon,width_wagon,height_wagon,count){
+            if(length_wagon<30|| width_wagon<40||height_wagon<50||count<1)
+               {
+                  alert('err')
+               }
+            else {
+               v2=0;v3=0;v4=0;v5=0;v6=0;
+               length_wagon=Number(length_wagon)+5;
+               width_wagon=Number(width_wagon)+5;
+               height_wagon=Number(height_wagon)+5;
+               console.log(length_wagon,width_wagon,height_wagon)
+               v1=Math.trunc(length_wagon/35)*Math.trunc(width_wagon/45)*Math.trunc(height_wagon/55);
+               if(length_wagon>=45){v2=Math.trunc(length_wagon/45)*Math.trunc(width_wagon/35)*Math.trunc(height_wagon/55);}
+               if(length_wagon>=55){v3=Math.trunc(length_wagon/55)*Math.trunc(width_wagon/45)*Math.trunc(height_wagon/35);}
+               if(width_wagon>=55){v4=Math.trunc(length_wagon/35)*Math.trunc(width_wagon/55)*Math.trunc(height_wagon/45);}
+               if(length_wagon>=45||width_wagon>=55){v5=Math.trunc(length_wagon/45)*Math.trunc(width_wagon/55)*Math.trunc(height_wagon/35);}
+               if(length_wagon>=55){v6=Math.trunc(length_wagon/55)*Math.trunc(width_wagon/35)*Math.trunc(height_wagon/45);}
+               console.log(v1,v2,v3,v4,v5,v6)
+               max=Math.max(v1,v2,v3,v4,v5,v6);
+               alert(Math.ceil(count/max))
+            }
+         }
+      </script>
+      <input type='number' id="length_wagon"  placeholder="Длина вагона" min=30>
+      <input type='number' id="width_wagon"  placeholder="Ширина вагона" min="40">
+      <input type='number' id="height_wagon"  placeholder="Высота вагона" min="50">
+      <input type='number' id="count"  placeholder="Число коробок"min=1>
+      <button onclick="t4(document.getElementById('length_wagon').value,document.getElementById('width_wagon').value,document.getElementById('height_wagon').value,document.getElementById('count').value)">result</button>
+   </div>
+   <hr>
+
+    </main>
+  </body>
+</html>
